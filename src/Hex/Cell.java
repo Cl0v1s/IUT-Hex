@@ -34,6 +34,16 @@ public class Cell {
 
     }
 
+    public int getLogicalX()
+    {
+        return this._xLog;
+    }
+
+    public int getLogicalY()
+    {
+        return this._yLog;
+    }
+
     public boolean contains(int x, int y)
     {
         int distance = Math.abs(this._xGra+rad-x)+Math.abs(this._yGra+rad-y);

@@ -9,6 +9,11 @@ import java.util.ArrayList;
  */
 public class HexGame extends JFrame
 {
+    public final static int Side = 9;
+    public final static Color VColor = Color.white;
+    public final static Color HColor = Color.BLACK;
+
+
     private View _screen;
     private Click _click;
     private Grid _grid;
@@ -28,15 +33,13 @@ public class HexGame extends JFrame
         _click = new Click(this);
         this._screen.addMouseListener(_click);
         //création de la grille
-        this._grid = new Grid(400/2-7*Cell.rad,800/2-7*Cell.rad, 7, 7);
+        this._grid = new Grid(400/2-HexGame.Side*Cell.rad,800/2-HexGame.Side*Cell.rad, HexGame.Side, HexGame.Side);
         //génération des joueurs
         this._players = new ArrayList<Player>();
-        this._players.add(new Player(Color.black));
-        this._players.add(new Player(Color.white));
+        this._players.add(new Player(HexGame.VColor));
+        this._players.add(new Player(HexGame.HColor));
         this._currentPlayer = this._players.get(0);
         this._currentPlayerId = 0;
-
-
     }
 
     public Grid getGrid()
@@ -57,10 +60,12 @@ public class HexGame extends JFrame
 
     public void turn()
     {
-        this._currentPlayerId += 1;
-        if(this._currentPlayerId >= this._players.size())
-            this._currentPlayerId = 0;
-        this._currentPlayer = this._players.get(this._currentPlayerId);
+        if(!this._grid.isWinner(this._currentPlayer)) {
+            this._currentPlayerId += 1;
+            if (this._currentPlayerId >= this._players.size())
+                this._currentPlayerId = 0;
+            this._currentPlayer = this._players.get(this._currentPlayerId);
+        }
     }
 
     public static void main(String args[])
