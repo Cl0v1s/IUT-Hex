@@ -21,6 +21,13 @@ public class Group {
             this._cells.add(cell);
     }
 
+    public void empty()
+    {
+        for(int i = 0; i!= this._cells.size();){
+            this._cells.remove(i);
+        }
+    }
+
     public int getSize()
     {
         return this._cells.size();

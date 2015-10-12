@@ -21,6 +21,7 @@ public class Grid {
         nbColonnes = rows;
         int ytmp = 0;
         this._cells = new ArrayList<Cell>();
+        this._groups = new ArrayList<Group>();
         for(int i = 0; i != lines; i++)
         {
             ytmp = 0;
@@ -59,23 +60,39 @@ public class Grid {
     {
         //TODO: ce truc est une horreur faudrait voir � l'am�liorer
         ArrayList<Cell> l = new ArrayList<Cell>();
+        Cell tmp;
         //top-left
-        l.add(getCellAt(origin.getLogicalX()-1, origin.getLogicalY()-1));
+        tmp = getCellAt(origin.getLogicalX()-1, origin.getLogicalY()-1);
+        if(tmp != null)
+            l.add(tmp);
         //top
-        l.add(getCellAt(origin.getLogicalX(), origin.getLogicalY()-1));
+        tmp = getCellAt(origin.getLogicalX(), origin.getLogicalY()-1);
+        if(tmp != null)
+            l.add(tmp);
         //top-right
-        l.add(getCellAt(origin.getLogicalX()+1, origin.getLogicalX()-1));
+        tmp = getCellAt(origin.getLogicalX() + 1, origin.getLogicalX()-1);
+        if(tmp != null)
+            l.add(tmp);
         //right
-        l.add(getCellAt(origin.getLogicalX()+1, origin.getLogicalY()));
+        tmp = getCellAt(origin.getLogicalX() + 1, origin.getLogicalY());
+        if(tmp != null)
+            l.add(tmp);
         //bot-right
-        l.add(getCellAt(origin.getLogicalX()+1, origin.getLogicalY()+1));
+        tmp = getCellAt(origin.getLogicalX() + 1, origin.getLogicalY()+1);
+        if(tmp != null)
+            l.add(tmp);
         //bot
-        l.add(getCellAt(origin.getLogicalX(), origin.getLogicalY()+1));
+        tmp = getCellAt(origin.getLogicalX(), origin.getLogicalY()+1);
+        if(tmp != null)
+            l.add(tmp);
         //bot-left
-        l.add(getCellAt(origin.getLogicalX()-1, origin.getLogicalY()+1));
+        tmp = getCellAt(origin.getLogicalX() - 1, origin.getLogicalY() + 1);
+        if(tmp != null)
+            l.add(tmp);
         //left
-        l.add(getCellAt(origin.getLogicalX()-1, origin.getLogicalY()));
-
+        tmp = getCellAt(origin.getLogicalX() - 1, origin.getLogicalY());
+        if(tmp != null)
+            l.add(tmp);
         return l;
     }
 
@@ -84,11 +101,24 @@ public class Grid {
         //on fait en sorte sue toutes les cellules adjacentes de même couleur soit du même groupe
         ArrayList<Cell> neigh = this.getNeighbours(c);
         Group g = neigh.get(0).getGroup();
+        //on vide le groupe afin d'éviter les doublons
+        if(g == null) {
+            g = new Group();
+            this._groups.add(g);
+        }
+        else
+            g.empty();
         for(Cell v : neigh)
         {
-            if(v.getColor() == c.getColor())
+            if(v.getColor() == c.getColor()) {
                 v.setGroup(g);
+                g.add(v);
+                System.out.println(v + " dans "+ g);
+            }
         }
+        //on ajoute au groupe la cellule qu'on vient d'ajouter
+        c.setGroup(g);
+        g.add(c);
         //on vérifie que certains groups ne sont pas inutiles
         for(int i = 0; i!=this._groups.size();)
         {
