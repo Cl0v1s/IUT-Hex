@@ -29,6 +29,7 @@ public class Click extends MouseInputAdapter {
             if(cells.get(i).contains(e.getX(), e.getY()))
             {
                 cells.get(i).onClick(this._game.getCurrentPlayer());
+                this._game.getGrid().putCell(cells.get(i));
                 done = true;
             }
             i++;

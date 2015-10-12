@@ -1,6 +1,7 @@
 package Hex;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by cportron on 08/10/15.
@@ -16,6 +17,7 @@ public class Cell {
     private int _yGra;
     private Polygon _polygon;
     private boolean _owned;
+    private Group _group;
 
     public Cell(final int xl,final int yl,final int xg,final int yg,final Color color)
     {
@@ -33,6 +35,7 @@ public class Cell {
         }
 
     }
+
 
     public int getLogicalX()
     {
@@ -67,5 +70,15 @@ public class Cell {
     public Polygon getPolygon()
     {
         return this._polygon;
+    }
+
+    public Group getGroup()
+    {
+        return _group;
+    }
+
+    public void setGroup(Group group)
+    {
+        this._group = group;
     }
 }
