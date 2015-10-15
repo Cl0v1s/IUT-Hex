@@ -1,10 +1,7 @@
 package Hex;
 
-import javafx.geometry.Point2D;
-
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 
 /**
  * Created by Clovis on 10/10/2015.
@@ -20,8 +17,8 @@ public class Grid {
         nbLignes = lines;
         nbColonnes = rows;
         int ytmp = 0;
-        this._cells = new ArrayList<Cell>();
-        this._groups = new ArrayList<Group>();
+        this._cells = new ArrayList<>();
+        this._groups = new ArrayList<>();
         for(int i = 0; i != lines; i++)
         {
             ytmp = 0;
@@ -29,7 +26,7 @@ public class Grid {
             {
                 ytmp = u*Cell.rad*2;
                 int xg, yg;
-                xg = xpos+(int)(u * (Cell.rad*2));
+                xg = xpos+(u * (Cell.rad*2));
                 yg = ypos+u*Cell.rad - ytmp + (i*(Cell.rad*2));
                 //d�termination de la position visuelle de la cellule dans la grille
                 Cell cell = new Cell(i,u,xg,yg, Color.lightGray);
@@ -59,7 +56,7 @@ public class Grid {
     public ArrayList<Cell> getNeighbours(Cell origin)
     {
         //TODO: ce truc est une horreur faudrait voir � l'am�liorer
-        ArrayList<Cell> l = new ArrayList<Cell>();
+        ArrayList<Cell> l = new ArrayList<>();
         Cell tmp;
         //top-left
         tmp = getCellAt(origin.getLogicalX()-1, origin.getLogicalY()-1);
@@ -131,6 +128,38 @@ public class Grid {
 
     public boolean isWinner(Player player)
     {
+        Boolean start = false;
+        Boolean end = false;
+        if(player.getColor() == HexGame.HColor)
+        {
+            for (Group _group : this._groups) {
+                for (int j = 0; j < _group.getSize(); j++) {
+                    if (_group.getCell(j).getLogicalY() == 0) {
+                        start = true;
+                    }
+                    if (_group.getCell(j).getLogicalY() == HexGame.Side) {
+                        end = true;
+                    }
+                    if (start && end) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            for (Group _group : this._groups) {
+                for (int j = 0; j < _group.getSize(); j++) {
+                    if (_group.getCell(j).getLogicalX() == 0) {
+                        start = true;
+                    }
+                    if (_group.getCell(j).getLogicalX() == HexGame.Side) {
+                        end = true;
+                    }
+                    if (start && end) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 

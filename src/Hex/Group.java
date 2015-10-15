@@ -1,7 +1,5 @@
 package Hex;
 
-import Hex.Cell;
-
 import java.util.ArrayList;
 
 /**
@@ -12,7 +10,7 @@ public class Group {
 
     public Group()
     {
-        this._cells = new ArrayList<Cell>();
+        this._cells = new ArrayList<>();
     }
 
     public void add(Cell cell)
@@ -31,5 +29,10 @@ public class Group {
     public int getSize()
     {
         return this._cells.size();
+    }
+
+    public Cell getCell(int index)
+    {
+        return this._cells.get(index);
     }
 }
