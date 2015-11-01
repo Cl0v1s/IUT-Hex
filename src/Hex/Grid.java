@@ -67,15 +67,11 @@ public class Grid {
         if(tmp != null)
             l.add(tmp);
         //top-right
-        tmp = getCellAt(origin.getLogicalX() + 1, origin.getLogicalX()-1);
-        if(tmp != null)
-            l.add(tmp);
-        //right
-        tmp = getCellAt(origin.getLogicalX() + 1, origin.getLogicalY());
+        tmp = getCellAt(origin.getLogicalX()+1, origin.getLogicalY());
         if(tmp != null)
             l.add(tmp);
         //bot-right
-        tmp = getCellAt(origin.getLogicalX() + 1, origin.getLogicalY()+1);
+        tmp = getCellAt(origin.getLogicalX()+1, origin.getLogicalY()+1);
         if(tmp != null)
             l.add(tmp);
         //bot
@@ -83,11 +79,7 @@ public class Grid {
         if(tmp != null)
             l.add(tmp);
         //bot-left
-        tmp = getCellAt(origin.getLogicalX() - 1, origin.getLogicalY() + 1);
-        if(tmp != null)
-            l.add(tmp);
-        //left
-        tmp = getCellAt(origin.getLogicalX() - 1, origin.getLogicalY());
+        tmp = getCellAt(origin.getLogicalX()-1, origin.getLogicalY());
         if(tmp != null)
             l.add(tmp);
         return l;
@@ -97,33 +89,33 @@ public class Grid {
     {
         //on fait en sorte sue toutes les cellules adjacentes de même couleur soit du même groupe
         ArrayList<Cell> neigh = this.getNeighbours(c);
-        Group g = neigh.get(0).getGroup();
+        int i = 0;
+        while (neigh.get(i).getColor() != c.getColor()) {
+            i++;
+            if (i == neigh.size()) {
+                return;
+            }
+        }
+        Group g = neigh.get(i).getGroup();
         //on vide le groupe afin d'éviter les doublons
         if(g == null) {
             g = new Group();
             this._groups.add(g);
         }
-        else
-            g.empty();
-        for(Cell v : neigh)
+        for(Cell n : neigh)
         {
-            if(v.getColor() == c.getColor()) {
-                v.setGroup(g);
-                g.add(v);
-                System.out.println(v + " dans "+ g);
+            if(n.getColor() == c.getColor() && n.getGroup() != g) {
+                if (n.getGroup() != null) {
+                    for (Cell o : n.getGroup().getCells()) {
+                        o.setGroup(g);
+                    }
+                    _groups.remove(g);
+                }
+                n.setGroup(g);
             }
         }
         //on ajoute au groupe la cellule qu'on vient d'ajouter
         c.setGroup(g);
-        g.add(c);
-        //on vérifie que certains groups ne sont pas inutiles
-        for(int i = 0; i!=this._groups.size();)
-        {
-            if(this._groups.get(i).getSize() == 0)
-                this._groups.remove(i);
-            else
-                i++;
-        }
     }
 
     public boolean isWinner(Player player)
@@ -132,12 +124,15 @@ public class Grid {
         Boolean end = false;
         if(player.getColor() == HexGame.HColor)
         {
-            for (Group _group : this._groups) {
-                for (int j = 0; j < _group.getSize(); j++) {
-                    if (_group.getCell(j).getLogicalY() == 0) {
+            for (Group group : this._groups) {
+                if (group.getColor() != player.getColor()) {
+                    continue;
+                }
+                for (int j = 0; j < group.getSize(); j++) {
+                    if (group.getCell(j).getLogicalX() == 0) {
                         start = true;
                     }
-                    if (_group.getCell(j).getLogicalY() == HexGame.Side) {
+                    if (group.getCell(j).getLogicalX() == HexGame.Side-1) {
                         end = true;
                     }
                     if (start && end) {
@@ -146,12 +141,15 @@ public class Grid {
                 }
             }
         } else {
-            for (Group _group : this._groups) {
-                for (int j = 0; j < _group.getSize(); j++) {
-                    if (_group.getCell(j).getLogicalX() == 0) {
+            for (Group group : this._groups) {
+                if (group.getColor() != player.getColor()) {
+                    continue;
+                }
+                for (int j = 0; j < group.getSize(); j++) {
+                    if (group.getCell(j).getLogicalY() == 0) {
                         start = true;
                     }
-                    if (_group.getCell(j).getLogicalX() == HexGame.Side) {
+                    if (group.getCell(j).getLogicalY() == HexGame.Side-1) {
                         end = true;
                     }
                     if (start && end) {

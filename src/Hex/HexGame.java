@@ -62,8 +62,9 @@ public class HexGame extends JFrame
     {
         if(!this._grid.isWinner(this._currentPlayer)) {
             this._currentPlayerId += 1;
-            if (this._currentPlayerId >= this._players.size())
+            if (this._currentPlayerId >= this._players.size()) {
                 this._currentPlayerId = 0;
+            }
             this._currentPlayer = this._players.get(this._currentPlayerId);
         } else {
             System.out.println("Le joueur " + this._currentPlayer + "a gagné");

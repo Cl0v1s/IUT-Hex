@@ -80,5 +80,14 @@ public class Cell {
     public void setGroup(Group group)
     {
         this._group = group;
+        group.add(this);
+
+        String color;
+        if (this.getColor() == HexGame.HColor) {
+            color = "Noir";
+        } else {
+            color = "Blanc";
+        }
+        System.out.println(this + " (" + color + ") dans " + group);
     }
 }
