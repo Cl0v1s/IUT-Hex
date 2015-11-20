@@ -36,6 +36,15 @@ public class Grid {
         }
     }
 
+    public void empty()
+    {
+        this._groups = new ArrayList<>();
+        for(Cell c : this._cells)
+        {
+            c.reset(Color.lightGray);
+        }
+    }
+
     public Cell getCellAt(final int x, final int y)
     {
         int i = 0;
@@ -136,6 +145,8 @@ public class Grid {
                         end = true;
                     }
                     if (start && end) {
+                        for(Cell c : group.getCells())
+                            c.setColor(Color.GREEN);
                         return true;
                     }
                 }
@@ -153,6 +164,8 @@ public class Grid {
                         end = true;
                     }
                     if (start && end) {
+                        for(Cell c : group.getCells())
+                            c.setColor(Color.GREEN);
                         return true;
                     }
                 }

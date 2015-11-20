@@ -21,6 +21,10 @@ public class Click extends MouseInputAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if(this._game.isDone()) {
+            this._game.restart();
+            return;
+        }
         ArrayList<Cell> cells = this._game.getGrid().getCells();
         boolean done = false;
         int i = 0;

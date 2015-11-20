@@ -20,6 +20,7 @@ public class HexGame extends JFrame
     private ArrayList<Player> _players;
     private Player _currentPlayer;
     private int _currentPlayerId;
+    private boolean _done;
 
     public HexGame()
     {
@@ -40,12 +41,21 @@ public class HexGame extends JFrame
         this._players.add(new Player(HexGame.HColor));
         this._currentPlayer = this._players.get(0);
         this._currentPlayerId = 0;
+        this._done = false;
     }
 
     public Grid getGrid()
     {
         return this._grid;
     }
+
+    public void restart()
+    {
+        this._done = false;
+        this._grid.empty();
+    }
+
+    public boolean isDone(){return this._done;}
     public View getView(){return this._screen;}
 
     public Player getCurrentPlayer()
@@ -60,14 +70,17 @@ public class HexGame extends JFrame
 
     public void turn()
     {
-        if(!this._grid.isWinner(this._currentPlayer)) {
-            this._currentPlayerId += 1;
-            if (this._currentPlayerId >= this._players.size()) {
-                this._currentPlayerId = 0;
+        if(this._done == false) {
+            if (!this._grid.isWinner(this._currentPlayer)) {
+                this._currentPlayerId += 1;
+                if (this._currentPlayerId >= this._players.size()) {
+                    this._currentPlayerId = 0;
+                }
+                this._currentPlayer = this._players.get(this._currentPlayerId);
+            } else {
+                System.out.println("Le joueur " + this._currentPlayer + "a gagné");
+                this._done = true;
             }
-            this._currentPlayer = this._players.get(this._currentPlayerId);
-        } else {
-            System.out.println("Le joueur " + this._currentPlayer + "a gagné");
         }
     }
 

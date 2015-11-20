@@ -36,6 +36,17 @@ public class Cell {
 
     }
 
+    public void setColor(Color color)
+    {
+        this._color = color;
+    }
+
+    public void reset(Color color)
+    {
+        this._owned = false;
+        this._color = color;
+    }
+
 
     public int getLogicalX()
     {
@@ -88,6 +99,5 @@ public class Cell {
         } else {
             color = "Blanc";
         }
-        System.out.println(this + " (" + color + ") dans " + group);
     }
 }

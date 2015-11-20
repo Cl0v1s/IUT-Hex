@@ -16,7 +16,6 @@ public class View extends Canvas {
         this.setBackground(Color.GRAY);
     }
 
-
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -26,5 +25,15 @@ public class View extends Canvas {
             g.setColor(cells.get(i).getColor());
             g.fillPolygon(cells.get(i).getPolygon());
         }
+        if(this._game.isDone())
+        {
+            String color = "Blanc";
+            if(this._game.getCurrentPlayer().getColor() != Color.white)
+                color= "Noir";
+            g.setColor(Color.GREEN);
+            g.drawString("Le joueur "+color+" a gagne.", 0,50);
+        }
     }
+
+
 }
