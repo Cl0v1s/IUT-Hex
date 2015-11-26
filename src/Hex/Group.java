@@ -20,7 +20,9 @@ public class Group {
         if (_cells.isEmpty()) {
             _color = cell.getColor();
         }
-        if(cell != null)
+        else if(cell.getColor() != _color)
+            return;
+        if(cell != null && !this._cells.contains(cell))
             this._cells.add(cell);
     }
 
@@ -29,6 +31,21 @@ public class Group {
         for(int i = 0; i != this._cells.size();){
             this._cells.remove(i);
         }
+    }
+
+    public void remove(Cell cell)
+    {
+        this._cells.remove(cell);
+    }
+
+    public Boolean contains(Cell cell)
+    {
+        return this._cells.contains(cell);
+    }
+
+    public boolean isEmpty()
+    {
+        return this._cells.isEmpty();
     }
 
     public int getSize()

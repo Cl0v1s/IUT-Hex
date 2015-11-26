@@ -90,6 +90,9 @@ public class Cell {
 
     public void setGroup(Group group)
     {
+        //Si cette cellule avait deja un groupe, on la supprime de ce groupe
+        if(this._group != null)
+            this._group.remove(this);
         this._group = group;
         group.add(this);
 

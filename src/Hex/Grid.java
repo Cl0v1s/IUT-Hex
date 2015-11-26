@@ -96,82 +96,120 @@ public class Grid {
 
     public void putCell(Cell c)
     {
+        ArrayList<Cell> open = new ArrayList<Cell>();
         //on fait en sorte sue toutes les cellules adjacentes de même couleur soit du même groupe
         ArrayList<Cell> neigh = this.getNeighbours(c);
-        int i = 0;
-        while (neigh.get(i).getColor() != c.getColor()) {
-            i++;
-            if (i == neigh.size()) {
-                return;
-            }
-        }
-        Group g = neigh.get(i).getGroup();
-        //on vide le groupe afin d'éviter les doublons
-        if(g == null) {
-            g = new Group();
-            this._groups.add(g);
-        }
-        for(Cell n : neigh)
+        for(Cell d : neigh)
         {
-            if(n.getColor() == c.getColor() && n.getGroup() != g) {
-                if (n.getGroup() != null) {
-                    for (Cell o : n.getGroup().getCells()) {
-                        o.setGroup(g);
-                    }
-                    _groups.remove(g);
-                }
-                n.setGroup(g);
-            }
+            if(d.getColor() == c.getColor()) //même si les vérifications de couleurs sont faites dans le groupe, on veut ici en priorité les cellules de même couleur que celle qui vient d'etre posé
+                open.add(d);
         }
-        //on ajoute au groupe la cellule qu'on vient d'ajouter
-        c.setGroup(g);
+
+        //création d'un nouveau groupe pour tous, pas d'amalgame
+        Group g = new Group();
+        //on propage ce groupeà travers les cellules voisines
+        while(!open.isEmpty())
+        {
+            Cell o = open.get(0);
+            if(!g.contains(o)) {
+                g.add(o);
+                o.setGroup(g);
+
+                //puis on ajoute à l'open liste les voisins de ce  voisins
+                ArrayList<Cell> n = this.getNeighbours(o);
+                for (Cell on : n) {
+                    //on check que ces noeuds ne sont pas deja dans le groupe
+                    if (!g.contains(on) && on.getColor() == c.getColor())
+                        open.add(on);
+                }
+            }
+            //on supprime maintenant le noeud actuel
+            open.remove(o);
+        }
+
+        for(Cell o : g.getCells()) {
+            System.out.println(g + " contient "+ o+"("+ o.getLogicalX()+","+o.getLogicalY()+")");
+        }
+
+        System.out.println("========");
+        this._groups.add(g);
     }
 
     public boolean isWinner(Player player)
     {
-        Boolean start = false;
-        Boolean end = false;
-        if(player.getColor() == HexGame.HColor)
+        //on créer une liste des groupes à supprimer à la fin des opération
+        //On supprime un groupe si celui-ci est vide
+        ArrayList<Group> toDelete = new ArrayList<Group>();
+        //variable de début et de fin
+        boolean start, end;
+        start = false; end = false;
+
+        if(player.getColor() == HexGame.VColor)
         {
-            for (Group group : this._groups) {
-                if (group.getColor() != player.getColor()) {
+            for(Group g : this._groups)
+            {
+                if(g.isEmpty()) {
+                    toDelete.add(g);
                     continue;
                 }
-                for (int j = 0; j < group.getSize(); j++) {
-                    if (group.getCell(j).getLogicalX() == 0) {
-                        start = true;
+                if(g.getColor() == HexGame.VColor)
+                {
+                    for(Cell c : g.getCells())
+                    {
+                        if(c.getLogicalX() == 0)
+                            start = true;
+                        else if(c.getLogicalX() == HexGame.Side -1)
+                            end = true;
                     }
-                    if (group.getCell(j).getLogicalX() == HexGame.Side-1) {
-                        end = true;
-                    }
-                    if (start && end) {
-                        for(Cell c : group.getCells())
-                            c.setColor(Color.GREEN);
+                    if(start && end)
+                    {
+                        //on colorie toutes les cellules du groupe en vert
+                        for(Cell c : g.getCells())
+                            c.setColor(Color.green);
                         return true;
                     }
+                    //sinon on remet start et end à faux et on continue
+                    start = false; end = false;
                 }
             }
-        } else {
-            for (Group group : this._groups) {
-                if (group.getColor() != player.getColor()) {
-                    continue;
-                }
-                for (int j = 0; j < group.getSize(); j++) {
-                    if (group.getCell(j).getLogicalY() == 0) {
-                        start = true;
-                    }
-                    if (group.getCell(j).getLogicalY() == HexGame.Side-1) {
-                        end = true;
-                    }
-                    if (start && end) {
-                        for(Cell c : group.getCells())
-                            c.setColor(Color.GREEN);
-                        return true;
-                    }
-                }
-            }
+            //on nettoie les groupes vides et on retourne faux pour signaler que le joueur Vcolor n'a pas gagné
+            for(Group g : toDelete)
+                this._groups.remove(g);
+            return false;
         }
-        return false;
+        else
+        {
+            for(Group g : this._groups)
+            {
+                if(g.isEmpty()) {
+                    toDelete.add(g);
+                    continue;
+                }
+                if(g.getColor() == HexGame.HColor)
+                {
+                    for(Cell c : g.getCells())
+                    {
+                        if(c.getLogicalY() == 0)
+                            start = true;
+                        else if(c.getLogicalY() == HexGame.Side -1)
+                            end = true;
+                    }
+                    if(start && end)
+                    {
+                        //on colorie toutes les cellules du groupe en vert
+                        for(Cell c : g.getCells())
+                            c.setColor(Color.green);
+                        return true;
+                    }
+                    //sinon on remet start et end à faux et on continue
+                    start = false; end = false;
+                }
+            }
+            //on nettoie les groupes vides et on retourne faux pour signaler que le joueur Vcolor n'a pas gagné
+            for(Group g : toDelete)
+                this._groups.remove(g);
+            return false;
+        }
     }
 
     public ArrayList<Cell> getCells()
