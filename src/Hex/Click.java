@@ -1,3 +1,9 @@
+/**
+ * Click.java
+ * Hugo Thiessard
+ * Clovis Portron
+ */
+
 package Hex;
 
 import javax.swing.event.MouseInputAdapter;
@@ -5,13 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-/**
- * Created by cportron on 08/10/15.
- */
 public class Click extends MouseInputAdapter {
     private HexGame _game;
-
-    
 
     public Click(HexGame game)
     {

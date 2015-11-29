@@ -1,11 +1,14 @@
+/**
+ * Grid.java
+ * Hugo Thiessard
+ * Clovis Portron
+ */
+
 package Hex;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * Created by Clovis on 10/10/2015.
- */
 public class Grid {
     private ArrayList<Cell> _cells;
     private ArrayList<Group> _groups;
@@ -36,6 +39,10 @@ public class Grid {
         }
     }
 
+    /*
+    empty
+    Vide la grille et la fait tournée à son état de départ
+     */
     public void empty()
     {
         this._groups = new ArrayList<>();
@@ -45,6 +52,10 @@ public class Grid {
         }
     }
 
+    /*
+    getCellAt
+    Retourne la cellule au point physique xy passé en paramètre
+     */
     public Cell getCellAt(final int x, final int y)
     {
         int i = 0;
@@ -62,9 +73,14 @@ public class Grid {
             return null;
     }
 
-    public ArrayList<Cell> getNeighbours(Cell origin)
+    /*
+    getNeightbours
+    Retourne les voisins de la cellule passée en paramètre
+     */
+    public ArrayList<Cell> getNeighbours(final Cell origin) throws IllegalArgumentException
     {
-        //TODO: ce truc est une horreur faudrait voir � l'am�liorer
+        if(origin == null)
+            throw new IllegalArgumentException("Origin ne peux être nulle.");
         ArrayList<Cell> l = new ArrayList<>();
         Cell tmp;
         //top-left
@@ -94,49 +110,57 @@ public class Grid {
         return l;
     }
 
-    public void putCell(Cell c)
+    /*
+    putCell
+    Gère les actions à réaliser lorsque la cellule cell passée en paramètre est "posée" sur le plateau
+     */
+    public void putCell(Cell cell) throws IllegalArgumentException
     {
+        if(cell == null)
+            throw new IllegalArgumentException("Cell ne peux être nulle.");
         ArrayList<Cell> open = new ArrayList<Cell>();
-        //on fait en sorte sue toutes les cellules adjacentes de même couleur soit du même groupe
-        ArrayList<Cell> neigh = this.getNeighbours(c);
-        for(Cell d : neigh)
+        //on fait en sorte que toutes les cellules adjacentes de même couleur soit du même groupe
+        ArrayList<Cell> neigh = this.getNeighbours(cell);
+        //on parcours tout les voisins de la cellule a placer et on les ajoutent à l'open liste
+        for(Cell other : neigh)
         {
-            if(d.getColor() == c.getColor()) //même si les vérifications de couleurs sont faites dans le groupe, on veut ici en priorité les cellules de même couleur que celle qui vient d'etre posé
-                open.add(d);
+            if(other.getColor() == cell.getColor()) //même si les vérifications de couleurs sont faites dans le groupe, on veut ici en priorité les cellules de même couleur que celle qui vient d'etre posé
+                open.add(other);
         }
 
         //création d'un nouveau groupe pour tous, pas d'amalgame
         Group g = new Group();
-        //on propage ce groupeà travers les cellules voisines
+        //on propage ce group eà travers les cellules de l'openList tant que celle-ci n'est pas vide
         while(!open.isEmpty())
         {
-            Cell o = open.get(0);
-            if(!g.contains(o)) {
-                g.add(o);
-                o.setGroup(g);
+            Cell first = open.get(0);
+            //Si le groupe ne contient pas déjà la première cellule de l'openList (pour éviter de faire la même opération deux fois)
+            if(!g.contains(first)) {
+                //on ajoute first au groupe
+                first.setGroup(g);
 
                 //puis on ajoute à l'open liste les voisins de ce  voisins
-                ArrayList<Cell> n = this.getNeighbours(o);
-                for (Cell on : n) {
+                ArrayList<Cell> others = this.getNeighbours(first);
+                for (Cell other : others) {
                     //on check que ces noeuds ne sont pas deja dans le groupe
-                    if (!g.contains(on) && on.getColor() == c.getColor())
-                        open.add(on);
+                    if (!g.contains(other) && other.getColor() == cell.getColor())
+                        open.add(other);
                 }
             }
             //on supprime maintenant le noeud actuel
-            open.remove(o);
+            open.remove(first);
         }
-
-        for(Cell o : g.getCells()) {
-            System.out.println(g + " contient "+ o+"("+ o.getLogicalX()+","+o.getLogicalY()+")");
-        }
-
-        System.out.println("========");
         this._groups.add(g);
     }
 
-    public boolean isWinner(Player player)
+    /*
+    isWinner
+    retourne si le joueur passé en paramètre a gagné la partie
+     */
+    public boolean isWinner(final Player player) throws IllegalArgumentException
     {
+        if(player == null)
+            throw new IllegalArgumentException("player ne peux être nul.");
         //on créer une liste des groupes à supprimer à la fin des opération
         //On supprime un groupe si celui-ci est vide
         ArrayList<Group> toDelete = new ArrayList<Group>();
@@ -148,12 +172,14 @@ public class Grid {
         {
             for(Group g : this._groups)
             {
+                //si le groupe est vide on l'ajoute a la liste de groupe à supprimer
                 if(g.isEmpty()) {
                     toDelete.add(g);
                     continue;
                 }
                 if(g.getColor() == HexGame.VColor)
                 {
+                    //on parcours les cellules si l'une est au début d'une colonne, start passe a vrai, en fin, end passe a vrai
                     for(Cell c : g.getCells())
                     {
                         if(c.getLogicalX() == 0)
@@ -161,6 +187,7 @@ public class Grid {
                         else if(c.getLogicalX() == HexGame.Side -1)
                             end = true;
                     }
+                    //Si start et end sont à vrai, alors, le groupe complète une colonne est le joueur blanc à gagné
                     if(start && end)
                     {
                         //on colorie toutes les cellules du groupe en vert
@@ -181,12 +208,14 @@ public class Grid {
         {
             for(Group g : this._groups)
             {
+                //si le groupe est vide on l'ajoute a la liste de groupe à supprimer
                 if(g.isEmpty()) {
                     toDelete.add(g);
                     continue;
                 }
                 if(g.getColor() == HexGame.HColor)
                 {
+                    //on parcours les cellules si l'une est au début d'une ligne, start passe a vrai, en fin, end passe a vrai
                     for(Cell c : g.getCells())
                     {
                         if(c.getLogicalY() == 0)
@@ -194,6 +223,7 @@ public class Grid {
                         else if(c.getLogicalY() == HexGame.Side -1)
                             end = true;
                     }
+                    //Si start et end sont à vrai, alors, le groupe complète une colonne est le joueur blanc à gagné
                     if(start && end)
                     {
                         //on colorie toutes les cellules du groupe en vert
@@ -212,6 +242,10 @@ public class Grid {
         }
     }
 
+    /*
+    getCells
+    Retourne la listes des cellules présentent dans la drogue
+     */
     public ArrayList<Cell> getCells()
     {
         return this._cells;

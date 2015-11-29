@@ -1,3 +1,9 @@
+/**
+ * Cell.java
+ * Hugo Thiessard
+ * Clovis Portron
+ */
+
 package Hex;
 
 import java.awt.*;
@@ -8,6 +14,7 @@ import java.util.ArrayList;
  */
 public class Cell {
 
+    //diamètre d'une cellule hexagonale
     public final static int rad = 20;
 
     private int _xLog;
@@ -36,29 +43,50 @@ public class Cell {
 
     }
 
-    public void setColor(Color color)
+    /*
+    setColor
+    définit la couleur de la cellule
+     */
+    public void setColor(final Color color) throws IllegalArgumentException
     {
+        if(color == null)
+            throw new IllegalArgumentException("Color ne peut pas être nul.");
         this._color = color;
     }
 
-    public void reset(Color color)
+    /*
+    reset
+    rend de nouveau la cellule "neutre"
+     */
+    public void reset(final Color color)
     {
         this._owned = false;
         this._color = color;
     }
 
-
+    /*
+    getLogicalX
+    retourne la position logique X de la cellule
+     */
     public int getLogicalX()
     {
         return this._xLog;
     }
 
+    /*
+    getLogicalY
+    retourne la position logique Y de la cellule
+     */
     public int getLogicalY()
     {
         return this._yLog;
     }
 
-    public boolean contains(int x, int y)
+    /*
+    contains
+    Retourne si la cellule contient le point au coordonnées x y transmises
+     */
+    public boolean contains(final int x,final int y)
     {
         int distance = Math.abs(this._xGra+rad-x)+Math.abs(this._yGra+rad-y);
         if(distance <= rad) {
@@ -67,27 +95,47 @@ public class Cell {
         return false;
     }
 
+    /*
+    onClick
+    Définit l'action de la cellule en l'associant au joueur passé en paramètre
+     */
     public void onClick(final Player player)
     {
         this._color = player.getColor();
         this._owned = true;
     }
 
+    /*
+    getColor
+    retourne la couleur actuelle de la cellule
+     */
     public Color getColor()
     {
         return this._color;
     }
 
+    /*
+    getPolygon
+    retourne la forme logique de la celluel
+     */
     public Polygon getPolygon()
     {
         return this._polygon;
     }
 
+    /*
+    getGroup
+    Retourne le groupe auquel est associé à la cellule
+     */
     public Group getGroup()
     {
         return _group;
     }
 
+    /*
+    setGroup
+    définie le groupe de la cellule, et l'associe à ce dernier
+     */
     public void setGroup(Group group)
     {
         //Si cette cellule avait deja un groupe, on la supprime de ce groupe

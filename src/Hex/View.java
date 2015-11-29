@@ -1,11 +1,14 @@
+/**
+ * View.java
+ * Hugo Thiessard
+ * Clovis Portron
+ */
+
 package Hex;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * Created by cportron on 08/10/15.
- */
 public class View extends Canvas {
 
     private HexGame _game;
@@ -19,6 +22,11 @@ public class View extends Canvas {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        g.setColor(Color.WHITE);
+        g.drawString("Regles:", 0,10);
+        g.drawString("Le joueur blanc doit remplir la grille verticalement.", 0,20);
+        g.drawString("Le joueur noir doit remplir la grille horizontalement.", 0,30);
+
         ArrayList<Cell> cells = this._game.getGrid().getCells();
         for(int i = 0; i!= cells.size(); i++)
         {
@@ -32,6 +40,8 @@ public class View extends Canvas {
                 color= "Noir";
             g.setColor(Color.GREEN);
             g.drawString("Le joueur "+color+" a gagne.", 0,50);
+            g.setColor(Color.WHITE);
+            g.drawString("Cliquez sur une cellule pour relancer une partie", 0,70);
         }
     }
 
