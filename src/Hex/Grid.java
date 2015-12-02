@@ -12,19 +12,14 @@ import java.util.ArrayList;
 public class Grid {
     private ArrayList<Cell> _cells;
     private ArrayList<Group> _groups;
-    private int nbLignes;
-    private int nbColonnes;
 
     public Grid(final int xpos, final int ypos, final int lines, final int rows)
     {
-        nbLignes = lines;
-        nbColonnes = rows;
-        int ytmp = 0;
+        int ytmp;
         this._cells = new ArrayList<>();
         this._groups = new ArrayList<>();
         for(int i = 0; i != lines; i++)
         {
-            ytmp = 0;
             for(int u = 0; u != rows; u++)
             {
                 ytmp = u*Cell.rad*2;
@@ -34,7 +29,6 @@ public class Grid {
                 //d�termination de la position visuelle de la cellule dans la grille
                 Cell cell = new Cell(i,u,xg,yg, Color.lightGray);
                 this._cells.add(cell);
-
             }
         }
     }
@@ -116,16 +110,18 @@ public class Grid {
      */
     public void putCell(Cell cell) throws IllegalArgumentException
     {
-        if(cell == null)
+        if(cell == null) {
             throw new IllegalArgumentException("Cell ne peux être nulle.");
-        ArrayList<Cell> open = new ArrayList<Cell>();
+        }
+        ArrayList<Cell> open = new ArrayList<>();
         //on fait en sorte que toutes les cellules adjacentes de même couleur soit du même groupe
-        ArrayList<Cell> neigh = this.getNeighbours(cell);
         //on parcours tout les voisins de la cellule a placer et on les ajoutent à l'open liste
-        for(Cell other : neigh)
+        for(Cell other : this.getNeighbours(cell))
         {
             if(other.getColor() == cell.getColor()) //même si les vérifications de couleurs sont faites dans le groupe, on veut ici en priorité les cellules de même couleur que celle qui vient d'etre posé
+            {
                 open.add(other);
+            }
         }
 
         //création d'un nouveau groupe pour tous, pas d'amalgame
@@ -143,8 +139,9 @@ public class Grid {
                 ArrayList<Cell> others = this.getNeighbours(first);
                 for (Cell other : others) {
                     //on check que ces noeuds ne sont pas deja dans le groupe
-                    if (!g.contains(other) && other.getColor() == cell.getColor())
+                    if (!g.contains(other) && other.getColor() == cell.getColor()) {
                         open.add(other);
+                    }
                 }
             }
             //on supprime maintenant le noeud actuel
@@ -163,7 +160,7 @@ public class Grid {
             throw new IllegalArgumentException("player ne peux être nul.");
         //on créer une liste des groupes à supprimer à la fin des opération
         //On supprime un groupe si celui-ci est vide
-        ArrayList<Group> toDelete = new ArrayList<Group>();
+        ArrayList<Group> toDelete = new ArrayList<>();
         //variable de début et de fin
         boolean start, end;
         start = false; end = false;
@@ -200,8 +197,7 @@ public class Grid {
                 }
             }
             //on nettoie les groupes vides et on retourne faux pour signaler que le joueur Vcolor n'a pas gagné
-            for(Group g : toDelete)
-                this._groups.remove(g);
+            toDelete.forEach(this._groups::remove);
             return false;
         }
         else
@@ -236,8 +232,7 @@ public class Grid {
                 }
             }
             //on nettoie les groupes vides et on retourne faux pour signaler que le joueur Vcolor n'a pas gagné
-            for(Group g : toDelete)
-                this._groups.remove(g);
+            toDelete.forEach(this._groups::remove);
             return false;
         }
     }

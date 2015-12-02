@@ -7,11 +7,7 @@
 package Hex;
 
 import java.awt.*;
-import java.util.ArrayList;
 
-/**
- * Created by cportron on 08/10/15.
- */
 public class Cell {
 
     //diamètre d'une cellule hexagonale
@@ -40,7 +36,6 @@ public class Cell {
         for(int i = 0; i != 6 ;i++) {
             this._polygon.addPoint((int)Math.round(this._xGra + rad * Math.cos(arc * i))+rad, (int)Math.round(this._yGra + rad * Math.sin(arc * i))+rad);
         }
-
     }
 
     /*
@@ -86,13 +81,9 @@ public class Cell {
     contains
     Retourne si la cellule contient le point au coordonnées x y transmises
      */
-    public boolean contains(final int x,final int y)
-    {
-        int distance = Math.abs(this._xGra+rad-x)+Math.abs(this._yGra+rad-y);
-        if(distance <= rad) {
-            return !this._owned;
-        }
-        return false;
+    public boolean contains(final int x,final int y) {
+        int distance = Math.abs(this._xGra + rad - x) + Math.abs(this._yGra + rad - y);
+        return distance <= rad && !this._owned;
     }
 
     /*
@@ -124,15 +115,6 @@ public class Cell {
     }
 
     /*
-    getGroup
-    Retourne le groupe auquel est associé à la cellule
-     */
-    public Group getGroup()
-    {
-        return _group;
-    }
-
-    /*
     setGroup
     définie le groupe de la cellule, et l'associe à ce dernier
      */
@@ -143,12 +125,5 @@ public class Cell {
             this._group.remove(this);
         this._group = group;
         group.add(this);
-
-        String color;
-        if (this.getColor() == HexGame.HColor) {
-            color = "Noir";
-        } else {
-            color = "Blanc";
-        }
     }
 }

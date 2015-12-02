@@ -20,7 +20,6 @@ public class HexGame extends JFrame
 
 
     private View _screen;
-    private Click _click;
     private Grid _grid;
     private ArrayList<Player> _players;
     private Player _currentPlayer;
@@ -37,12 +36,12 @@ public class HexGame extends JFrame
         this._screen = new View(this);
         add(this._screen, "Center");
         //cration du controller
-        _click = new Click(this);
-        this._screen.addMouseListener(_click);
+        Click click = new Click(this);
+        this._screen.addMouseListener(click);
         //création de la grille
         this._grid = new Grid(400/2-HexGame.Side*Cell.rad,800/2-HexGame.Side*Cell.rad, HexGame.Side, HexGame.Side);
         //génération des joueurs
-        this._players = new ArrayList<Player>();
+        this._players = new ArrayList<>();
         this._players.add(new Player(HexGame.VColor));
         this._players.add(new Player(HexGame.HColor));
         this._currentPlayer = this._players.get(0);
@@ -91,21 +90,12 @@ public class HexGame extends JFrame
     }
 
     /*
-    getPlayers
-    retourne la liste des joueurs
-     */
-    public ArrayList<Player> getPlayers()
-    {
-        return this._players;
-    }
-
-    /*
     turn
     permet au prochain joueur de jouer, une fois le test de fin de jeu réalisé
      */
     public void turn()
     {
-        if(this._done == false) {
+        if(!this._done) {
             if (!this._grid.isWinner(this._currentPlayer)) {
                 this._currentPlayerId += 1;
                 if (this._currentPlayerId >= this._players.size()) {
