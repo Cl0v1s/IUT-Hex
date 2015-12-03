@@ -4,7 +4,7 @@
  * Clovis Portron
  */
 
-package Hex;
+package ThiessardPortron;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,12 @@ import java.util.ArrayList;
 
 public class HexGame extends JFrame
 {
-    public final static int Side = 7;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public final static int Side = 7;
 
     //Paramètre les deux couleurs qui correspondent à la couleur du joueur horizontal et vertical
     public final static Color VColor = Color.white;
@@ -114,6 +119,7 @@ public class HexGame extends JFrame
      */
     public static void main(String args[])
     {
-        HexGame game = new HexGame();
+        @SuppressWarnings("unused")
+		HexGame game = new HexGame();
     }
 }

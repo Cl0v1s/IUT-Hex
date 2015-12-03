@@ -4,7 +4,7 @@
  * Clovis Portron
  */
 
-package Hex;
+package ThiessardPortron;
 
 import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;

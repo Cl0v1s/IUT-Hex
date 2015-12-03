@@ -1,4 +1,4 @@
-package Hex;
+package ThiessardPortron;
 
 import org.junit.Test;
 

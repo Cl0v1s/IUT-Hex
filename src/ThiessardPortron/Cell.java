@@ -4,7 +4,7 @@
  * Clovis Portron
  */
 
-package Hex;
+package ThiessardPortron;
 
 import java.awt.*;
 

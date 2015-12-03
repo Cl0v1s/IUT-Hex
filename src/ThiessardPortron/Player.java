@@ -3,7 +3,7 @@
  * Hugo Thiessard
  * Clovis Portron
  */
-package Hex;
+package ThiessardPortron;
 
 import java.awt.*;
 

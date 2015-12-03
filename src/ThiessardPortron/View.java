@@ -4,14 +4,18 @@
  * Clovis Portron
  */
 
-package Hex;
+package ThiessardPortron;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class View extends Canvas {
 
-    private HexGame _game;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private HexGame _game;
 
     public View(HexGame game)
     {
