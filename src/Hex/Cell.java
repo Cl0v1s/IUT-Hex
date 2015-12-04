@@ -78,6 +78,15 @@ public class Cell {
     }
 
     /*
+    isOwned
+    retourne true si la cellule appartient à un joueur
+     */
+    public boolean isOwned() {
+        return _owned;
+    }
+
+
+    /*
     contains
     Retourne si la cellule contient le point au coordonnées x y transmises
      */
@@ -115,14 +124,23 @@ public class Cell {
     }
 
     /*
+    getGroup
+    revoit le groupe de la cellule
+     */
+    public Group getGroup() {
+        return _group;
+    }
+
+    /*
     setGroup
     définie le groupe de la cellule, et l'associe à ce dernier
      */
     public void setGroup(Group group)
     {
         //Si cette cellule avait deja un groupe, on la supprime de ce groupe
-        if(this._group != null)
+        if(this._group != null) {
             this._group.remove(this);
+        }
         this._group = group;
         group.add(this);
     }

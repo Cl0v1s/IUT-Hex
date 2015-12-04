@@ -1,51 +1,28 @@
 package Hex;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by hthiessard on 02/12/15.
  */
 public class HexGameTest {
 
-    @Test
-    public void testGetGrid() throws Exception {
+    HexGame _game;
 
+    @Before
+    public void setUp() {
+        _game = new HexGame();
     }
 
     @Test
     public void testRestart() throws Exception {
-
-    }
-
-    @Test
-    public void testIsDone() throws Exception {
-
-    }
-
-    @Test
-    public void testGetView() throws Exception {
-
-    }
-
-    @Test
-    public void testGetCurrentPlayer() throws Exception {
-
-    }
-
-    @Test
-    public void testGetPlayers() throws Exception {
-
-    }
-
-    @Test
-    public void testTurn() throws Exception {
-
-    }
-
-    @Test
-    public void testMain() throws Exception {
-
+        _game.restart();
+        assertEquals(_game.isDone(), false);
+        assertEquals(_game.getGrid().getGroups(), new ArrayList<Group>());
     }
 }

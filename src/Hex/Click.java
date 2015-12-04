@@ -7,6 +7,7 @@
 package Hex;
 
 import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
@@ -19,8 +20,16 @@ public class Click extends MouseInputAdapter {
         this._game = game;
     }
 
+    public HexGame getGame() {
+        return _game;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
+        clicked(e.getX(), e.getY());
+    }
+
+    public void clicked(int x, int y) {
         if(this._game.isDone()) {
             this._game.restart();
             return;
@@ -30,7 +39,7 @@ public class Click extends MouseInputAdapter {
         int i = 0;
         while(!done && i != cells.size())
         {
-            if(cells.get(i).contains(e.getX(), e.getY()))
+            if(cells.get(i).contains(x, y))
             {
                 cells.get(i).onClick(this._game.getCurrentPlayer());
                 this._game.getGrid().putCell(cells.get(i));

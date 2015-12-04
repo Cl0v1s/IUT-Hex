@@ -34,6 +34,14 @@ public class Grid {
     }
 
     /*
+    getGroups
+    revoit les groupes
+     */
+    public ArrayList<Group> getGroups() {
+        return _groups;
+    }
+
+    /*
     empty
     Vide la grille et la fait tournée à son état de départ
      */
@@ -197,7 +205,9 @@ public class Grid {
                 }
             }
             //on nettoie les groupes vides et on retourne faux pour signaler que le joueur Vcolor n'a pas gagné
-            toDelete.forEach(this._groups::remove);
+            for (Group group : toDelete) {
+                this._groups.remove(group);
+            }
             return false;
         }
         else
@@ -232,7 +242,9 @@ public class Grid {
                 }
             }
             //on nettoie les groupes vides et on retourne faux pour signaler que le joueur Vcolor n'a pas gagné
-            toDelete.forEach(this._groups::remove);
+            for (Group group : toDelete) {
+                this._groups.remove(group);
+            }
             return false;
         }
     }
